@@ -180,6 +180,13 @@ void loop() {
     
     int row, col;
     bool rightward = True;
+
+    // dispense droplet from top left reservoir
+    // send droplet to top left corner of grid
+    myDrop->move_up();
+    Serial.println("up");
+    OpenDropDevice.update_Drops();
+    OpenDropDevice.update();
     
     for (row = 0; row < 8; row++) {
 
@@ -208,8 +215,8 @@ void loop() {
         }
     }
     
-    // send droplet back to top left of grid
-    for (row = 0; row < 8; row++) {
+    // send droplet back to the output of the top left reservoir
+    for (row = 0; row < 7; row++) {
         myDrop->move_up();
         Serial.println("up");
 
