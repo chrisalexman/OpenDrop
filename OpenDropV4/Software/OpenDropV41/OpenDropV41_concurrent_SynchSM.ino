@@ -56,6 +56,7 @@ task5.elapsedTime = task5.period;
 task5.TickFct = &TickFct_Joystick;
 
 unsigned short i;
+unsigned long GCD = 1;
 
 
 OpenDrop OpenDropDevice = OpenDrop();
@@ -95,7 +96,8 @@ int TickFct_Comm(int state) {
                 if (x < FluxlPad_width)
                     for (y = 0; y < 8; y++)
                         FluxCom[x][y] = (((readbyte) >> (y)) & 0x01);
-                else ControlBytesIn[x - FluxlPad_width] = readbyte;
+                else
+                    ControlBytesIn[x - FluxlPad_width] = readbyte;
                 x++;
 
                 digitalWrite(LED_Rx_pin,HIGH);
@@ -195,7 +197,6 @@ int TickFct_Menu(int state) {
     switch(state) {
         case AM_Init:
             SWITCH_state = digitalRead(SW1_pin);
-            SWITCH_state2 = digitalRead(SW2_pin);
 
             if (!SWITCH_state) {  // activate Menu
                 OpenDropAudio.playMe(1);
@@ -231,6 +232,8 @@ int TickFct_Reservoir(int state) {
 
     switch(state) {
         case AR_Init:
+            SWITCH_state2 = digitalRead(SW2_pin);
+
             if (!SWITCH_state2) {  // activate Reservoirs
                 if ((myDrop->position_x() == 15) && (myDrop->position_y() == 3)) {
                     myDrop->begin(14, 1);
