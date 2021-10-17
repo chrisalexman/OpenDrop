@@ -82,34 +82,6 @@ bool Magnet2_state = false;
 int j = 0;
 
 
-// 1. setup loop
-// the setup function runs once when you press reset or power the board
-void setup() {
-    Serial.begin(115200);
-
-    OpenDropDevice.begin("c02");
-
-    ControlBytesOut[23] = OpenDropDevice.get_ID();
-
-    OpenDropDevice.set_voltage(240, false, 1000);
-
-    OpenDropDevice.set_Fluxels(FluxCom);
-
-    pinMode(JOY_pin, INPUT);
-
-    OpenDropAudio.begin(16000);
-    OpenDropAudio.playMe(2);
-    delay(2000);
-
-    OpenDropDevice.drive_Fluxels();
-    OpenDropDevice.update_Display();
-    Serial.println("Welcome to OpenDrop");
-
-    myDrop->begin(7, 4);
-    OpenDropDevice.update();
-}
-
-
 // 2. serial communication
 enum Comm_States { SC_Init };
 
@@ -118,7 +90,6 @@ int TickFct_Comm(int state) {
     switch(state) {
         case SC_Init:
             if (Serial.available() > 0) {  // receive data from App
-
                 readbyte = Serial.read();
 
                 if (x < FluxlPad_width)
@@ -161,23 +132,23 @@ int TickFct_Comm(int state) {
             }
             else
                 digitalWrite(LED_Rx_pin, LOW);
-            
+
             state = SC_Init;
             break;
-            
+
         default:
             state = SC_Init;
             break;
     }
-    
+
     switch(state) {
         case SC_Init:
             break;
-        
+
         default:
             break;
     }
-    
+
     return state;
 }
 
@@ -211,7 +182,7 @@ int TickFct_Display(int state) {
         default:
             break;
     }
-    
+
     return state;
 }
 
@@ -394,13 +365,40 @@ int TickFct_Joystick(int state) {
 }
 
 
-void loop() {
+// 1. setup loop
+// the setup function runs once when you press reset or power the board
+void setup() {
+    Serial.begin(115200);
 
+    OpenDropDevice.begin("c02");
+
+    ControlBytesOut[23] = OpenDropDevice.get_ID();
+
+    OpenDropDevice.set_voltage(240, false, 1000);
+
+    OpenDropDevice.set_Fluxels(FluxCom);
+
+    pinMode(JOY_pin, INPUT);
+
+    OpenDropAudio.begin(16000);
+    OpenDropAudio.playMe(2);
+    delay(2000);
+
+    OpenDropDevice.drive_Fluxels();
+    OpenDropDevice.update_Display();
+    Serial.println("Welcome to OpenDrop");
+
+    myDrop->begin(7, 4);
+    OpenDropDevice.update();
+}
+
+
+void loop() {
     for(i = 0; i < numTasks; i++) {
-        if(tasks[i]->elapsedTime == tasks[i]->period) {
-            tasks[i]->state = tasks[i]->TickFct(tasks[i]->state);
-            tasks[i]->elapsedTime = 0;
+        if(tasks[i].elapsedTime == tasks[i].period) {
+            tasks[i].state = tasks[i].TickFct(tasks[i].state);
+            tasks[i].elapsedTime = 0;
         }
-        tasks[i]->elapsedTime += GCD;
+        tasks[i].elapsedTime += GCD;
     }
 }
