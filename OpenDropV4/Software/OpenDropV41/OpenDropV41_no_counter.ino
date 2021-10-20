@@ -42,38 +42,8 @@ task *tasks[] = { &task1, &task2, &task3, &task4, &task5 };
 const unsigned short numTasks = sizeof(tasks)/sizeof(task*);
 
 const char start = -1;
-
-task1.state = start;
-task1.period = 1;                   // period of 1 ms
-task1.elapsedTime = task1.period;
-task1.TickFct = &TickFct_Comm;
-
-task2.state = start;
-task2.period = 1;                   // period of 1 ms
-task2.elapsedTime = task2.period;
-task2.TickFct = &TickFct_Display;
-
-task3.state = start;
-task3.period = 1;                   // period of 1 ms
-task3.elapsedTime = task3.period;
-task3.TickFct = &TickFct_Menu;
-
-task4.state = start;
-task4.period = 1;                   // period of 1 ms
-task4.elapsedTime = task4.period;
-task4.TickFct = &TickFct_Reservoir;
-
-task5.state = start;
-task5.period = 1;                   // period of 1 ms
-task5.elapsedTime = task5.period;
-task5.TickFct = &TickFct_Joystick;
-
 unsigned short i;
-
 unsigned long GCD = tasks[1]->period;
-for(i = 1; i < numTasks; i++) {
-    GCD = findGCD(GCD, tasks[i]->period);
-}
 
 
 OpenDrop OpenDropDevice = OpenDrop();
@@ -371,6 +341,36 @@ int TickFct_Joystick(int state) {
 // 1. setup loop
 // the setup function runs once when you press reset or power the board
 void setup() {
+    task1.state = start;
+    task1.period = 1;                   // period of 1 ms
+    task1.elapsedTime = task1.period;
+    task1.TickFct = &TickFct_Comm;
+
+    task2.state = start;
+    task2.period = 1;                   // period of 1 ms
+    task2.elapsedTime = task2.period;
+    task2.TickFct = &TickFct_Display;
+
+    task3.state = start;
+    task3.period = 1;                   // period of 1 ms
+    task3.elapsedTime = task3.period;
+    task3.TickFct = &TickFct_Menu;
+
+    task4.state = start;
+    task4.period = 1;                   // period of 1 ms
+    task4.elapsedTime = task4.period;
+    task4.TickFct = &TickFct_Reservoir;
+
+    task5.state = start;
+    task5.period = 1;                   // period of 1 ms
+    task5.elapsedTime = task5.period;
+    task5.TickFct = &TickFct_Joystick;
+
+    for(i = 1; i < numTasks; i++) {
+        GCD = findGCD(GCD, tasks[i]->period);
+    }
+
+
     Serial.begin(115200);
 
     OpenDropDevice.begin("c02");
