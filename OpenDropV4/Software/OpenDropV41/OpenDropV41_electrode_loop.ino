@@ -179,7 +179,7 @@ void loop() {
     // activate each electrode in sequence
 
     int row, col;
-    bool rightward = True;
+    bool rightward = true;
 
     // dispense droplet from top left reservoir
     // send droplet to top left corner of grid
@@ -191,7 +191,7 @@ void loop() {
     for (row = 0; row < 8; row++) {
 
         for (col = 0; col < 16; col++) {
-            if rightward {
+            if (rightward) {
                         myDrop->move_right();
                         Serial.println("right");
                 }
